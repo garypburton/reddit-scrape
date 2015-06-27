@@ -40,41 +40,16 @@ app.get('/searching', function(req, res){
 	var val = req.query.search;
 	//console.log(val);
 
-	// url used to search yql
+	// url used to search reddit
 	var url = "http://reddit.com/r/" + val + "/hot.json?jsonp=test&limit=50";
-	// console.log(url);
-
-	// request module is used to process the yql url and return the results in JSON format
-	// request(url, function(err, resp, body) {
-	// 	// body = JSON.parse(body);
-	// 	// var jsonObj = body.data.children;
-	// 	function test(data){
-	// 		console.log(data);
-	// 	}
-	// 	test();
-		
-	// 	// console.log(jasonObj[0].data.url);
-	// 	// for(var i = 0; i < jsonObj.length; i++) {
-	// 	//     var obj = jsonObj[i];
-
-	// 	//     console.log(obj.data.url);
-	// 	// }
-		
-	// });
-
-	// testing the route
-	// res.send("WHEEE");
+	
 	request({uri: url}, 
 		function(err, resp, body){ 
 			jsonpData = body;
 			jsonpSandbox = vm.createContext({test: function(r){return r;}});
 			myObject = vm.runInContext(jsonpData,jsonpSandbox);
 			var jsonObj = myObject.data.children;
-			for(var i = 0; i < jsonObj.length; i++) {
-			    var obj = jsonObj[i];
-
-			    console.log(obj.data.url);
-			}
+			res.send(jsonObj);
 		});
 
 });

@@ -1,9 +1,14 @@
 extends layout
 
 block content
-	h1 search sf jobs
-	input#search(type="search", placeholder="Search Craig's Jobs")
-	h2#results
+	h1 Type the name of an image based subreddit and press enter
+	input#search(type="search", placeholder="Subreddit to Display")
+	div.content-wrap
+		div.loader
+		div#results.cf
 
 	script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+	script(src="//cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.1.8/imagesloaded.pkgd.min.js")
+	script(src="//cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js")
+	
 	script(src="/javascripts/main.js")
