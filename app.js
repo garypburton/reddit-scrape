@@ -41,7 +41,7 @@ app.get('/searching', function(req, res){
 	//console.log(val);
 
 	// url used to search yql
-	var url = "http://reddit.com/r/" + val + ".json?jsonp=test";
+	var url = "http://reddit.com/r/" + val + "/hot.json?jsonp=test&limit=50";
 	// console.log(url);
 
 	// request module is used to process the yql url and return the results in JSON format
