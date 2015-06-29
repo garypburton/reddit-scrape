@@ -60,6 +60,7 @@ app.get('/searching', function(req, res){
 				jsonpSandbox = vm.createContext({test: function(r){return r;}});
 				myObject = vm.runInContext(jsonpData,jsonpSandbox);
 				var reddit = myObject.data.children;
+				// console.log(reddit);
 			}
 			
 			res.send(reddit);
