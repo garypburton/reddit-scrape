@@ -42,9 +42,17 @@ app.get('/searching', function(req, res){
 
 	// url used to search reddit
 	var url = "http://reddit.com/r/" + val + "/hot.json?jsonp=test&limit=50";
-	
+
+	requests(url,function(data){
+		res.send(data);
+		console.log(data);
+	});
+});	
+
+function requests(url, callback){
 	request({uri: url}, 
 		function(err, resp, body){ 
+			var resultsArray = [];
 			var isJson = true;
 			try{
 				JSON.parse(body);
@@ -54,19 +62,28 @@ app.get('/searching', function(req, res){
 			}
 			if (isJson){
 				// console.log('Yes');
-				reddit = "No subreddit found";
+				resultsArray.push({error:"Error - No subreddit found"});
 			}else{
 				jsonpData = body;
 				jsonpSandbox = vm.createContext({test: function(r){return r;}});
 				myObject = vm.runInContext(jsonpData,jsonpSandbox);
 				var reddit = myObject.data.children;
-				// console.log(reddit);
+				for(var i = 0; i < reddit.length; i++) {
+					    var obj = reddit[i];
+					    var src = obj.data.url
+					    if(src.indexOf('.png') > 0 || src.indexOf('.jpg') > 0 || src.indexOf('.gif') > 0 && src.indexOf('.gifv') <= 0){
+					    	resultsArray.push(
+					    		{url:src}
+					    	);
+					    }   
+					}
 			}
-			
-			res.send(reddit);
+			callback(resultsArray);
 		});
+};
+	
 
-});
+
 
 // old routes
 // app.get('/', routes.index);

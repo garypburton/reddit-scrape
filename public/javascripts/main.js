@@ -1,8 +1,11 @@
 /////////////////////////////
 ////    client side     ////
 ///////////////////////////
+var source = $("#search-results").html();
+var dataTemplate = Handlebars.compile(source);
 var $container = $('#results');
 var $grid;
+
 
 $(function(){
   	$('#search').on('keyup', function(e){
@@ -16,19 +19,12 @@ $(function(){
 	    			$grid.masonry('destroy');
 	    			$('#results > img').remove();
 	    		}
-	    		if (typeof data == "string"){
-	    			var error = $('<h2></h2>').html(data);
-	    			$container.append(error);
-	    			loader.fadeOut('slow');
-	    		}else{
-	    			for(var i = 0; i < data.length; i++) {
-					    var obj = data[i];
-					    var src = obj.data.url
-					    if(src.indexOf('.png') > 0 || src.indexOf('.jpg') > 0 || src.indexOf('.gif') > 0 && src.indexOf('.gifv') <= 0){
-					    	var images = $('<img class="item"/>').attr('src', src);
-					    	$container.append(images);
-					    }   
-					}
+	    		// if (data.indexOf("Error") > -1){
+	    		// 	var error = $('<h2></h2>').html(data[0]);
+	    		// 	$container.append(error);
+	    		// 	loader.fadeOut('slow');
+	    		// }else{
+	    			$container.html(dataTemplate({resultsArray:data}));
 					// init Masonry
 					$grid = $container.masonry({
 					  	// options...
@@ -42,7 +38,7 @@ $(function(){
 						console.log('done'+laidOutItems.length);
 						loader.fadeOut('slow');
 					})
-	    		}
+	    		//}
 	    	});
   		};
   	});
