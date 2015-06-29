@@ -45,11 +45,24 @@ app.get('/searching', function(req, res){
 	
 	request({uri: url}, 
 		function(err, resp, body){ 
-			jsonpData = body;
-			jsonpSandbox = vm.createContext({test: function(r){return r;}});
-			myObject = vm.runInContext(jsonpData,jsonpSandbox);
-			var jsonObj = myObject.data.children;
-			res.send(jsonObj);
+			var isJson = true;
+			try{
+				JSON.parse(body);
+			}catch(e){
+				// console.log('not json');
+				isJson = false;
+			}
+			if (isJson){
+				// console.log('Yes');
+				reddit = "No subreddit found";
+			}else{
+				jsonpData = body;
+				jsonpSandbox = vm.createContext({test: function(r){return r;}});
+				myObject = vm.runInContext(jsonpData,jsonpSandbox);
+				var reddit = myObject.data.children;
+			}
+			
+			res.send(reddit);
 		});
 
 });
