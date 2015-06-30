@@ -60,10 +60,11 @@ function requests(url, callback){
 				// console.log('not json');
 				isJson = false;
 			}
-			if (isJson){
-				// console.log('Yes');
-				resultsArray.push({error:"Error - No subreddit found"});
-			}else{
+			// if (isJson){
+			// 	// console.log('Error - No subreddit found');
+			// 	// resultsArray.push({error:"Error - No subreddit found"});
+			// }else
+			if(!isJson){
 				jsonpData = body;
 				jsonpSandbox = vm.createContext({test: function(r){return r;}});
 				myObject = vm.runInContext(jsonpData,jsonpSandbox);

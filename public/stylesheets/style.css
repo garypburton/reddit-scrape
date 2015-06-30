@@ -77,3 +77,7 @@ header{
 	height: auto;
 	float: left;
 }
+
+#results h2{
+	text-align: center;
+}
