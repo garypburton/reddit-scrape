@@ -1,9 +1,5 @@
 <script id="search-results" type="text/x-handlebars-template">
-	{{#if resultsArray}}
 	{{#each resultsArray}}
 		<img src={{url}} class="item"/>
 	{{/each}}
-	{{else}}
-		<h2>Error - no subreddit found</h2>
-	{{/if}}
 </script>

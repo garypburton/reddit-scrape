@@ -19,11 +19,7 @@ $(function(){
 	    			$grid.masonry('destroy');
 	    			$('#results > img').remove();
 	    		}
-	    		// if (data.indexOf("Error") > -1){
-	    		// 	var error = $('<h2></h2>').html(data[0]);
-	    		// 	$container.append(error);
-	    		// 	loader.fadeOut('slow');
-	    		// }else{
+	    		if (data instanceof Array){
 	    			$container.html(dataTemplate({resultsArray:data}));
 					// init Masonry
 					$grid = $container.masonry({
@@ -38,7 +34,11 @@ $(function(){
 						console.log('done'+laidOutItems.length);
 						loader.fadeOut('slow');
 					})
-	    		//}
+	    		}else{
+					var error = $('<h2></h2>').html(data);
+	    			$container.append(error);
+	    			loader.fadeOut('slow');
+	    		}
 	    	});
   		};
   	});
