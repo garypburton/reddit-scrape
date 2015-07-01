@@ -5,6 +5,7 @@ var source = $("#search-results").html();
 var dataTemplate = Handlebars.compile(source);
 var $container = $('#results');
 var $grid;
+var masonryActive;
 
 
 $(function(){
@@ -13,12 +14,19 @@ $(function(){
 	  		var loader = $('.loader');
 	  		loader.css('display', 'block');
 	    	var parameters = { search: $(this).val() };
+	    	
+    		if($('#results > h2').length > 0 && masonryActive == false){
+    			$('#results > h2').remove();
+				console.log(masonryActive);
+    		}
+    		if(masonryActive == true){
+    			console.log(masonryActive);
+    			$('#results > img').remove();
+    			$grid.masonry('destroy');
+    			masonryActive = false;
+    			console.log(masonryActive);
+    		}
 	    	$.get( '/searching',parameters, function(data) {
-	    		$('#results > h2').remove();
-	    		if($grid){
-	    			$grid.masonry('destroy');
-	    			$('#results > img').remove();
-	    		}
 	    		if (data instanceof Array){
 	    			$container.html(dataTemplate({resultsArray:data}));
 					// init Masonry
@@ -34,10 +42,14 @@ $(function(){
 						console.log('done'+laidOutItems.length);
 						loader.fadeOut('slow');
 					})
+					masonryActive = true;
+					console.log(masonryActive);
 	    		}else{
 					var error = $('<h2></h2>').html(data);
 	    			$container.append(error);
 	    			loader.fadeOut('slow');
+	    			masonryActive = false;
+	    			console.log(masonryActive);
 	    		}
 	    	});
   		};
