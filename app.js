@@ -12,7 +12,6 @@ var path = require('path');
 var request = require('request');
 var util = require('util')
 var app = express();
-var vm = require('vm');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -41,7 +40,7 @@ app.get('/searching', function(req, res){
 	//console.log(val);
 
 	// url used to search reddit
-	var url = "http://reddit.com/r/" + val + "/hot.json?jsonp=test&limit=50";
+	var url = "http://reddit.com/r/" + val + "/hot.json?limit=50";
 
 	requests(url,function(data){
 		res.send(data);
@@ -52,36 +51,21 @@ app.get('/searching', function(req, res){
 function requests(url, callback){
 	request({uri: url}, 
 		function(err, resp, body){ 
-			// console.log(err);
-			// console.log(resp);
 			var resultsArray = [];
-			var isJson = true;
-			try{
-				JSON.parse(body);
-			}catch(e){
-				// console.log('not json');
-				isJson = false;
+			myObject = JSON.parse(body);
+			var reddit = myObject.data.children;
+			for(var i = 0; i < reddit.length; i++) {
+			    var obj = reddit[i];
+			    var src = obj.data.url;
+			    if(src.indexOf('.png') > 0 || src.indexOf('.jpg') > 0 || src.indexOf('.gif') > 0 && src.indexOf('.gifv') <= 0){
+			    	resultsArray.push(
+			    		{url:src}
+			    	);
+			    }   
 			}
-			if (isJson){
-				results = "Error - no subreddit found";
-				callback(results);
-			}else{
-				jsonpData = body;
-				jsonpSandbox = vm.createContext({test: function(r){return r;}});
-				myObject = vm.runInContext(jsonpData,jsonpSandbox);
-				var reddit = myObject.data.children;
-				for(var i = 0; i < reddit.length; i++) {
-				    var obj = reddit[i];
-				    var src = obj.data.url
-				    if(src.indexOf('.png') > 0 || src.indexOf('.jpg') > 0 || src.indexOf('.gif') > 0 && src.indexOf('.gifv') <= 0){
-				    	resultsArray.push(
-				    		{url:src}
-				    	);
-				    }   
-				}
-				callback(resultsArray);
-			}
+			callback(resultsArray);
 		});
+
 };
 	
 
