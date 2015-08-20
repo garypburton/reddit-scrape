@@ -27,7 +27,7 @@ $(function(){
     			console.log(masonryActive);
     		}
 	    	$.get( '/searching',parameters, function(data) {
-	    		if (data instanceof Array){
+	    		if (data.length > 0){
 	    			$container.html(dataTemplate({resultsArray:data}));
 					// init Masonry
 					$grid = $container.masonry({
@@ -45,7 +45,7 @@ $(function(){
 					masonryActive = true;
 					console.log(masonryActive);
 	    		}else{
-					var error = $('<h2></h2>').html(data);
+					var error = $('<h2></h2>').html('No results found');
 	    			$container.append(error);
 	    			loader.fadeOut('slow');
 	    			masonryActive = false;
